@@ -66,13 +66,18 @@ d3.csv("assets/data/data.csv").then((healthData) => {
     .attr("opacity", ".5");
 
     //create a separte variable to do labels
+    //why doesn't selectAll('text') not work
     var circleText = chartGroup.selectAll()
+    .attr("class","circleLabel")
     .data(healthData)
     .enter()
     .append("text")
     .attr("x", d => xScale(d.poverty))
     .attr("y", d => yScale(d.healthcare))
     .text(d => {return d.abbr})
+    .attr("text-anchor", "middle")
+    .attr("font-size","8px")
+    .attr("font-weight", "bold")
     .attr("fill", "black");
 
 
@@ -95,6 +100,20 @@ d3.csv("assets/data/data.csv").then((healthData) => {
         .on("mouseout", function(data, index) {
             toolTip.hide(data);
         });
+    
+    //create our axes labels
+    chartGroup.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 0 - margin.left)
+        .attr("x", 0 - (height / 2))
+        .attr("dy", "1em")
+        .attr("class", "axisText")
+        .text("Lacks Healthcare (%)");
+
+    chartGroup.append("text")
+      .attr("transform", `translate(${width / 2}, ${height + (margin.top - 5)})`)
+      .attr("class", "axisText")
+      .text("In Poverty (%)");
 
 
 });
