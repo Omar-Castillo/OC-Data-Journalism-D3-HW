@@ -53,6 +53,17 @@ function renderCircles(circlesGroup, newXScale, chosenXAxis) {
     return circlesGroup;
 }
 
+//create a function for updating the state labels
+function updateCircleLabels(circleText, xLinearScale,chosenXAxis) {
+    circleText.transition()
+        .duration(1000)
+        .attr("x", d => xLinearScale(d[chosenXAxis]))
+        console.log("hey")
+        // .attr("cx", d => newXScale(d[chosenXAxis]))
+
+    return circleText;
+}
+
 //create function used for updating circles group new tooltip
 function updateToolTip(chosenXAxis, circlesGroup) {
 
@@ -144,18 +155,18 @@ d3.csv("assets/data/data.csv").then((healthData) => {
     //create a separte variable to do labels
     //why doesn't selectAll('text') not work
     var circleText = chartGroup.selectAll()
-    .attr("class","circleLabel")
-    .data(healthData)
-    .enter()
-    .append("text")
-    // .attr("x", d => xLinearScale(d.poverty))
-    .attr("x", d => xLinearScale(d[chosenXAxis]))
-    .attr("y", d => yLinearScale(d.healthcare))
-    .text(d => {return d.abbr})
-    .attr("text-anchor", "middle")
-    .attr("font-size","8px")
-    .attr("font-weight", "bold")
-    .attr("fill", "black");
+        .attr("class","circleLabel")
+        .data(healthData)
+        .enter()
+        .append("text")
+        // .attr("x", d => xLinearScale(d.poverty))
+        .attr("x", d => xLinearScale(d[chosenXAxis]))
+        .attr("y", d => yLinearScale(d.healthcare))
+        .text(d => {return d.abbr})
+        .attr("text-anchor", "middle")
+        .attr("font-size","8px")
+        .attr("font-weight", "bold")
+        .attr("fill", "black");
 
 
 
@@ -240,6 +251,9 @@ d3.csv("assets/data/data.csv").then((healthData) => {
 
                 //updates tooltips with new info, call our updateToolTip function
                 circlesGroup = updateToolTip(chosenXAxis, circlesGroup);
+
+                //updates circleTextLabels calling our function
+                circleText = updateCircleLabels(circleText, xLinearScale, chosenXAxis);
 
                 //changes classes to change bold text
                 if (chosenXAxis === "poverty") {
